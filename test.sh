@@ -24,7 +24,10 @@ check python3 --version
 check pip3 --version
 check python3 -m venv --help
 
-for mod in psycopg2 argcomplete boto3 dateutil; do
+for mod in psycopg2 argcomplete boto3 dateutil \
+           azure.identity azure.storage.blob azure.mgmt.compute \
+           google.cloud.storage google.cloud.compute grpc \
+           snappy cramjam zstandard lz4; do
   check python3 -c "import $mod"
 done
 

@@ -7,6 +7,7 @@ The image is based on the latest Ubuntu and includes:
 - `barman`, `barman-cli`, `barman-cli-cloud`
 - Python 3 with `pip` and `venv`
 - Barman's Python dependencies: `psycopg2`, `argcomplete`, `boto3`, `python-dateutil`
+- Optional Barman libraries: Azure (`azure-identity`, `azure-storage-blob`, `azure-mgmt-compute`), GCP (`google-cloud-storage`, `google-cloud-compute`, `grpcio`) and compression (`python-snappy`, `cramjam`, `zstandard`, `lz4`)
 - `rsync`, `file`, `tar`
 
 ## Requirements
@@ -58,5 +59,5 @@ docker run -it --rm \
 
 ## Notes
 
-- Recent Ubuntu releases block system-wide `pip install` (PEP 668), so Python packages are installed with `apt`. To use a newer package from PyPI, create a virtualenv inside the container.
+- Recent Ubuntu releases block system-wide `pip install` (PEP 668), so Python packages are installed with `apt` where possible. Libraries Ubuntu doesn't package (Azure, Google Cloud, `cramjam`) are installed with `pip --break-system-packages` into the system Python, which is the interpreter Barman uses.
 - The image only provides the tooling. You still need to supply your own Barman configuration and network access to your PostgreSQL servers.
