@@ -35,6 +35,16 @@ Or run a single command:
 
 `build.sh` passes extra arguments to `docker build`, for example `./build.sh --platform linux/amd64` to build for Intel.
 
+## Testing
+
+Build the image and verify that Barman, Python, pip and all dependencies are installed:
+
+```sh
+./test.sh
+```
+
+The script exits non-zero if any check fails.
+
 ## Persisting configuration and backups
 
 Containers are started with `--rm`, so anything inside is lost on exit. To keep configuration or backups, mount host directories with `docker run -v`. For example:
