@@ -22,7 +22,7 @@ Build the image:
 ./build.sh
 ```
 
-Open a shell in the container:
+Open a shell in the container (named and hostnamed `barmanhost`):
 
 ```sh
 ./run.sh
@@ -51,7 +51,7 @@ The script exits non-zero if any check fails.
 Containers are started with `--rm`, so anything inside is lost on exit. To keep configuration or backups, mount host directories with `docker run -v`. For example:
 
 ```sh
-docker run -it --rm \
+docker run -it --rm --name barmanhost --hostname barmanhost \
   -v "$PWD/barman.conf:/etc/barman.conf:ro" \
   -v "$PWD/backups:/var/lib/barman" \
   barman-macos barman list-server
