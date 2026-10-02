@@ -10,7 +10,7 @@ The image is based on the latest Ubuntu and includes:
 - Optional Barman libraries: Azure (`azure-identity`, `azure-storage-blob`, `azure-mgmt-compute`), GCP (`google-cloud-storage`, `google-cloud-compute`, `grpcio`) and compression (`python-snappy`, `cramjam`, `zstandard`, `lz4`)
 - `rsync`, `file`, `tar`
 - PostgreSQL client tools (`pg_basebackup`, `pg_receivewal`, `psql`) and `libpq`
-- A default server definition, [barman.d/streaming-backup-server.conf](barman.d/streaming-backup-server.conf), installed at `/etc/barman.d/`. It expects a PostgreSQL host named `pghost` with `barman` and `streaming_barman` users; edit the file before building to match your setup.
+- Default server definitions installed at `/etc/barman.d/`: [streaming-backup-server.conf](barman.d/streaming-backup-server.conf) (streaming replication) and [rsync-backup-server.conf](barman.d/rsync-backup-server.conf) (rsync and WAL archiving). Both expect a PostgreSQL host named `pghost`; the streaming one also expects `barman` and `streaming_barman` users, and the rsync one SSH access as `postgres@pghost`. Edit the files before building to match your setup.
 
 ## Requirements
 
@@ -49,6 +49,7 @@ barman list-servers
 You should see all backup servers configured on Barman, which confirms it is aware of the default server:
 
 ```
+rsync-backup-server - Postgres server using Rsync and WAL archiving
 streaming-backup-server - Postgres server using streaming replication
 ```
 
