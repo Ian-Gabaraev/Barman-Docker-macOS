@@ -52,6 +52,30 @@ You should see all backup servers configured on Barman, which confirms it is awa
 streaming-backup-server - Postgres server using streaming replication
 ```
 
+### Check the server
+
+Once both Barman and your PostgreSQL server are configured, run on `barmanhost`:
+
+```sh
+barman check streaming-backup-server
+```
+
+If some checks fail, try the following:
+
+- **WAL archive check fails:** Barman hasn't received a complete WAL file yet, usually because no WAL segment has switched since the server was created. Force a switch:
+
+  ```sh
+  barman switch-wal --force streaming-backup-server
+  ```
+
+- **Replication slot or `pg_receivewal` checks fail:** Run `barman cron`. It starts a background maintenance process that creates the replication slot (when `create_slot = auto`) and starts `pg_receivewal`.
+
+  ```sh
+  barman cron
+  ```
+
+Then run `barman check streaming-backup-server` again. When no checks fail, the server is ready to take backups and receive WAL files. Continue with [taking your first backup](https://docs.pgbarman.org/release/3.20.1/user_guide/quickstart.html#quickstart-taking-your-first-backup).
+
 ## Testing
 
 Build the image and verify that Barman, Python, pip and all dependencies are installed:
