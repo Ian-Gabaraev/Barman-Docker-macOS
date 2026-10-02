@@ -6,12 +6,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Python deps come from apt where available: recent Ubuntu releases block system-wide
 # `pip install` (PEP 668), and the apt barman package runs on the system Python.
+# postgresql-client provides pg_basebackup/pg_receivewal, needed for streaming backups (libpq5 comes with psycopg2).
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         python3 python3-pip python3-venv \
         python3-psycopg2 python3-argcomplete python3-boto3 python3-dateutil \
         python3-grpcio python3-snappy python3-zstandard python3-lz4 \
         rsync file tar \
+        postgresql-client \
         barman barman-cli barman-cli-cloud \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,5 +24,8 @@ RUN pip3 install --no-cache-dir --break-system-packages --ignore-installed \
         azure-identity azure-storage-blob azure-mgmt-compute \
         google-cloud-storage google-cloud-compute \
         "cramjam>=2.7.0"
+
+# Default server definition; edit barman.d/ or mount over /etc/barman.d to change it.
+COPY barman.d/ /etc/barman.d/
 
 CMD ["bash"]

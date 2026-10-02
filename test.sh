@@ -15,7 +15,7 @@ check() {
 }
 
 for cmd in barman barman-cloud-backup barman-cloud-restore barman-wal-archive \
-           python3 pip3 rsync file tar; do
+           python3 pip3 rsync file tar pg_basebackup pg_receivewal psql; do
   check command -v "$cmd"
 done
 
@@ -23,6 +23,7 @@ check barman --version
 check python3 --version
 check pip3 --version
 check python3 -m venv --help
+check grep -q '^\[streaming-backup-server\]' /etc/barman.d/streaming-backup-server.conf
 
 for mod in psycopg2 argcomplete boto3 dateutil \
            azure.identity azure.storage.blob azure.mgmt.compute \

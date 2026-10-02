@@ -9,6 +9,8 @@ The image is based on the latest Ubuntu and includes:
 - Barman's Python dependencies: `psycopg2`, `argcomplete`, `boto3`, `python-dateutil`
 - Optional Barman libraries: Azure (`azure-identity`, `azure-storage-blob`, `azure-mgmt-compute`), GCP (`google-cloud-storage`, `google-cloud-compute`, `grpcio`) and compression (`python-snappy`, `cramjam`, `zstandard`, `lz4`)
 - `rsync`, `file`, `tar`
+- PostgreSQL client tools (`pg_basebackup`, `pg_receivewal`, `psql`) and `libpq`
+- A default server definition, [barman.d/streaming-backup-server.conf](barman.d/streaming-backup-server.conf), installed at `/etc/barman.d/`. It expects a PostgreSQL host named `pghost` with `barman` and `streaming_barman` users; edit the file before building to match your setup.
 
 ## Requirements
 
@@ -35,6 +37,20 @@ Or run a single command:
 ```
 
 `build.sh` passes extra arguments to `docker build`, for example `./build.sh --platform linux/amd64` to build for Intel.
+
+### Verify it works
+
+On `barmanhost`, run:
+
+```sh
+barman list-servers
+```
+
+You should see all backup servers configured on Barman, which confirms it is aware of the default server:
+
+```
+streaming-backup-server - Postgres server using streaming replication
+```
 
 ## Testing
 
